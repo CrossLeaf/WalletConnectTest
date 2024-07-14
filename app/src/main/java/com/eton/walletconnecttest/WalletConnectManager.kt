@@ -1,7 +1,6 @@
 package com.eton.walletconnecttest
 
 import android.app.Activity
-import android.util.Log
 import com.walletconnect.android.Core
 import com.walletconnect.android.CoreClient
 import com.walletconnect.android.relay.ConnectionType
@@ -38,9 +37,11 @@ object WalletConnectManager {
         }
 
         val initParams = Wallet.Params.Init(core = CoreClient)
-        Web3Wallet.initialize(initParams) { error ->
-            // Error will be thrown if there's an issue during initialization
-            Log.d("EEE", "error: $error")
-        }
+        Web3Wallet.initialize(initParams,
+            onSuccess = {
+                Timber.tag(TAG).e("Web3Wallet initialize onSuccess")
+            }, onError = {
+                Timber.tag(TAG).e("Web3Wallet initialize error %s", it.throwable.message)
+            })
     }
 }
