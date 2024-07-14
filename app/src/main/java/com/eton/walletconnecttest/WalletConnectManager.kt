@@ -10,6 +10,7 @@ import com.walletconnect.web3.wallet.client.Web3Wallet
 import timber.log.Timber
 
 object WalletConnectManager {
+    private const val TAG = "WalletConnectManager"
     val projectId =
         "042ce9d30ccb9664092eb63ec3c11b34" // Get Project ID at https://cloud.walletconnect.com/
     val relayUrl = "relay.walletconnect.com"
@@ -33,7 +34,7 @@ object WalletConnectManager {
             metaData = appMetaData,
             telemetryEnabled = telemetryEnabled
         ) { error: Core.Model.Error ->
-            Timber.tag(TAG).e("CoreClient initialize error %s", it.throwable.message)
+            Timber.tag(TAG).e("CoreClient initialize error %s", error.throwable.message)
         }
 
         val initParams = Wallet.Params.Init(core = CoreClient)
