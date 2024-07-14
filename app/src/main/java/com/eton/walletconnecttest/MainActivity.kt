@@ -23,7 +23,7 @@ class MainActivity : AppCompatActivity() {
         // Set an OnClickListener to the TextView
         tvHello.setOnClickListener {
             // Define what happens when the TextView is clicked
-            WalletConnectManager(activity = this)
+            WalletConnectManager.init(activity = this)
         }
     }
 }
