@@ -1,10 +1,13 @@
 package com.eton.walletconnecttest
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.net.toUri
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 
@@ -20,10 +23,13 @@ class MainActivity : AppCompatActivity() {
         }
         val tvHello = findViewById<TextView>(R.id.tvHello)
 
+        WalletConnectManager.init(activity = this)
+        WalletConnectManager.signInit(this)
         // Set an OnClickListener to the TextView
         tvHello.setOnClickListener {
             // Define what happens when the TextView is clicked
-            WalletConnectManager.init(activity = this)
+//            startActivity(Intent(Intent.ACTION_VIEW, "tbpay://request".toUri(), this, MainActivity::class.java))
+            WalletConnectManager.signConnect()
         }
     }
 }

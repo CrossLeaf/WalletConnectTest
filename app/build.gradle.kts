@@ -49,4 +49,5 @@ dependencies {
     implementation(platform("com.walletconnect:android-bom:1.32.1"))
     implementation("com.walletconnect:android-core")
     implementation("com.walletconnect:web3wallet")
+    implementation("com.walletconnect:sign")
 }
