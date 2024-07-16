@@ -1,14 +1,22 @@
 package com.eton.walletconnecttest
 
 import android.app.Activity
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.util.Log
+import androidx.core.content.ContextCompat.startActivity
+import androidx.core.net.toUri
 import com.walletconnect.android.Core
 import com.walletconnect.android.CoreClient
+import com.walletconnect.android.internal.common.wcKoinApp
 import com.walletconnect.android.relay.ConnectionType
 import com.walletconnect.sign.client.Sign
 import com.walletconnect.sign.client.SignClient
+import com.walletconnect.util.Empty
 import com.walletconnect.web3.wallet.client.Wallet
 import com.walletconnect.web3.wallet.client.Web3Wallet
+import java.util.UUID
 
 object WalletConnectManager {
     private const val TAG = "EEE"
@@ -23,7 +31,7 @@ object WalletConnectManager {
         description = "Wallet Description",
         url = "Wallet URL",
         icons = listOf("https://raw.githubusercontent.com/WalletConnect/walletconnect-assets/master/Icon/Gradient/Icon.png")/*list of icon url strings*/,
-        redirect = "kotlin-web3modal://request" // Custom Redirect URI
+        redirect = "kotlin-wallet-wc:/request" // Custom Redirect URI
     )
 
 
@@ -67,33 +75,43 @@ object WalletConnectManager {
             })
     }
 
-    fun signConnect() {
+    fun signConnect(activity: Activity) {
         // 設置以太坊的命名空間和參數
         val namespace = "eip155"
         val chains = listOf("eip155:1") // 1 表示以太坊主網
         val methods = listOf("eth_sendTransaction", "personal_sign", "eth_signTypedData") // 所需的方法
         val events = listOf("accountsChanged", "chainChanged") // 所需的事件
         val accounts = listOf<String>() // 可選：在這裡添加具體帳戶，如果已知
-        val namespaces: Map<String, Sign.Model.Namespace.Proposal> = mapOf(
+        val namespaces = mapOf(
             namespace to Sign.Model.Namespace.Proposal(chains, methods, events)
         )
-        val pairing = CoreClient.Pairing.create()?.let {
 //        val pairing = Core.Model.Pairing("", 0L, null, "", null, "", true, "") // 初始化或獲取現有配對
-
+        CoreClient.Pairing.create()?.let {
             val connectParams = Sign.Params.Connect(namespaces, pairing = it)
 
             SignClient.connect(connectParams,
                 { onSuccess ->
                     /*callback that returns letting you know that you have successfully initiated connecting*/
-                    Log.d(TAG, "SignClient connect onSuccess, $onSuccess")
+                    Log.d(TAG, "SignClient connect onSuccess: $onSuccess")
+                    CoreClient.Pairing.pair(Core.Params.Pair(onSuccess), {
+                        Log.d(TAG, "SignClient pair onSuccess: $it")
+                        if (it.uri.isNotEmpty()) {
+                            val intent = Intent(Intent.ACTION_VIEW)
+                            intent.data = it.uri.toUri()
+                            startActivity(activity, intent, null)
+                        } else {
+                            println("Failed to generate connect URI")
+                        }
+                    }, {
+                        Log.d(TAG, "SignClient pair error: ${it.throwable}")
+                    })
+
                 },
                 { error ->
                     /*callback for error while trying to initiate a connection with a peer*/
-                    Log.d(TAG, "${error.throwable} SignClient connect error")
+                    Log.d(TAG, "SignClient connect error: ${error.throwable}")
                 }
             )
         }
     }
-
-
 }

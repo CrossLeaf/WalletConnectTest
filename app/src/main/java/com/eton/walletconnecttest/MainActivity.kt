@@ -28,8 +28,9 @@ class MainActivity : AppCompatActivity() {
         // Set an OnClickListener to the TextView
         tvHello.setOnClickListener {
             // Define what happens when the TextView is clicked
-//            startActivity(Intent(Intent.ACTION_VIEW, "tbpay://request".toUri(), this, MainActivity::class.java))
-            WalletConnectManager.signConnect()
+            WalletConnectManager.signConnect(this)
+//            startActivity(Intent(Intent.ACTION_VIEW, "tbpay://wc?uri=wc".toUri(), this, MainActivity::class.java))
+
         }
     }
 }
