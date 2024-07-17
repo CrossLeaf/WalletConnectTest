@@ -1,22 +1,17 @@
 package com.eton.walletconnecttest
 
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import android.util.Log
 import androidx.core.content.ContextCompat.startActivity
 import androidx.core.net.toUri
 import com.walletconnect.android.Core
 import com.walletconnect.android.CoreClient
-import com.walletconnect.android.internal.common.wcKoinApp
 import com.walletconnect.android.relay.ConnectionType
 import com.walletconnect.sign.client.Sign
 import com.walletconnect.sign.client.SignClient
-import com.walletconnect.util.Empty
 import com.walletconnect.web3.wallet.client.Wallet
 import com.walletconnect.web3.wallet.client.Web3Wallet
-import java.util.UUID
 
 object WalletConnectManager {
     private const val TAG = "EEE"
@@ -47,6 +42,7 @@ object WalletConnectManager {
         }
 
         val initParams = Wallet.Params.Init(core = CoreClient)
+
         Web3Wallet.initialize(initParams,
             onSuccess = {
                 Log.d(TAG, "Web3Wallet initialize onSuccess")
@@ -69,10 +65,12 @@ object WalletConnectManager {
             onSuccess = {
                 Log.d(TAG, "SignClient initialize onSuccess")
 
-                SignClient.setDappDelegate(WCDelegate.dappDelegate)
             }, onError = {
                 Log.d(TAG, "SignClient initialize error  ${it.throwable.message}")
             })
+        SignClient.setDappDelegate(WCDelegate.dappDelegate)
+        SignClient.setWalletDelegate(WCDelegate.walletDelegate)
+
     }
 
     fun signConnect(activity: Activity) {

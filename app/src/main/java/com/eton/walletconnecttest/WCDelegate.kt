@@ -15,7 +15,6 @@ import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import org.json.JSONObject
-import timber.log.Timber
 
 object WCDelegate : Web3Wallet.WalletDelegate, CoreClient.CoreDelegate {
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
@@ -57,7 +56,7 @@ object WCDelegate : Web3Wallet.WalletDelegate, CoreClient.CoreDelegate {
     }
 
     override fun onError(error: Wallet.Model.Error) {
-        Timber.d("error", JSONObject().put("error", error.throwable.stackTraceToString()))
+        Log.d("EEE", "error "+JSONObject().put("error", error.throwable.stackTraceToString()))
         scope.launch {
             _walletEvents.emit(error)
         }
@@ -152,64 +151,97 @@ object WCDelegate : Web3Wallet.WalletDelegate, CoreClient.CoreDelegate {
     val walletDelegate = object : SignClient.WalletDelegate {
 
         override fun onSessionExtend(session: Sign.Model.Session) {
+            Log.d("EEE", "WalletDelegate onSessionExtend:  $session")
         }
 
         override fun onSessionProposal(
             sessionProposal: Sign.Model.SessionProposal,
             verifyContext: Sign.Model.VerifyContext
         ) {
+            Log.d("EEE", "WalletDelegate onSessionProposal:  $sessionProposal")
         }
 
         override fun onSessionRequest(
             sessionRequest: Sign.Model.SessionRequest,
             verifyContext: Sign.Model.VerifyContext
         ) {
+            Log.d("EEE", "WalletDelegate onSessionRequest:  $sessionRequest")
         }
 
         override fun onSessionSettleResponse(settleSessionResponse: Sign.Model.SettledSessionResponse) {
+            Log.d("EEE", "WalletDelegate onSessionSettleResponse:  $settleSessionResponse")
         }
 
         override fun onSessionUpdateResponse(sessionUpdateResponse: Sign.Model.SessionUpdateResponse) {
+            Log.d("EEE", "WalletDelegate onSessionUpdateResponse:  $sessionUpdateResponse")
         }
 
         override fun onConnectionStateChange(state: Sign.Model.ConnectionState) {
+            Log.d("EEE", "WalletDelegate onConnectionStateChange:  $state")
         }
 
         override fun onError(error: Sign.Model.Error) {
+            Log.d("EEE", "WalletDelegate onError:  $error")
         }
 
         override fun onSessionDelete(deletedSession: Sign.Model.DeletedSession) {
+            Log.d("EEE", "WalletDelegate onSessionDelete:  $deletedSession")
         }
     }
 
     val dappDelegate = object : SignClient.DappDelegate {
-        override fun onConnectionStateChange(state: Sign.Model.ConnectionState) {}
-        override fun onError(error: Sign.Model.Error) {}
+        override fun onConnectionStateChange(state: Sign.Model.ConnectionState) {
+            Log.d("EEE", "DappDelegate onConnectionStateChange:  $state")
+        }
+
+        override fun onError(error: Sign.Model.Error) {
+            Log.d("EEE", "DappDelegate onError:  $error")
+        }
+
         override fun onProposalExpired(proposal: Sign.Model.ExpiredProposal) {
+            Log.d("EEE", "DappDelegate onProposalExpired:  $proposal")
         }
 
         override fun onRequestExpired(request: Sign.Model.ExpiredRequest) {
+            Log.d("EEE", "DappDelegate onRequestExpired:  $request")
         }
 
         override fun onSessionApproved(approvedSession: Sign.Model.ApprovedSession) {
+            Log.d("EEE", "DappDelegate onSessionApproved:  $approvedSession")
         }
 
         override fun onSessionDelete(deletedSession: Sign.Model.DeletedSession) {
+            Log.d("EEE", "DappDelegate onSessionDelete:  $deletedSession")
         }
 
         override fun onSessionEvent(sessionEvent: Sign.Model.SessionEvent) {
+            Log.d("EEE", "DappDelegate onSessionEvent:  $sessionEvent")
         }
 
         override fun onSessionExtend(session: Sign.Model.Session) {
+            Log.d("EEE", "DappDelegate onSessionExtend:  $session")
         }
 
         override fun onSessionRejected(rejectedSession: Sign.Model.RejectedSession) {
+            Log.d("EEE", "DappDelegate onSessionRejected:  $rejectedSession")
         }
 
         override fun onSessionRequestResponse(response: Sign.Model.SessionRequestResponse) {
+            Log.d("EEE", "DappDelegate onSessionRequestResponse:  $response")
         }
 
         override fun onSessionUpdate(updatedSession: Sign.Model.UpdatedSession) {
+            Log.d("EEE", "DappDelegate onSessionUpdate:  $updatedSession")
+        }
+
+        override fun onSessionAuthenticateResponse(sessionAuthenticateResponse: Sign.Model.SessionAuthenticateResponse) {
+            super.onSessionAuthenticateResponse(sessionAuthenticateResponse)
+            Log.d("EEE", "DappDelegate onSessionAuthenticateResponse:  $sessionAuthenticateResponse")
+        }
+
+        override fun onSessionEvent(sessionEvent: Sign.Model.Event) {
+            super.onSessionEvent(sessionEvent)
+            Log.d("EEE", "DappDelegate onSessionEvent:  $sessionEvent")
         }
     }
 }
