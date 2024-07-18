@@ -103,6 +103,7 @@ object WalletConnectManager {
             }, onError = {
                 Log.d(TAG, "Web3Wallet initialize error  ${it.throwable.message}")
             })
+        Web3Modal.setDelegate(WCDelegate.web3ModelDelegate)
     }
 
     fun signConnect(activity: Activity) {

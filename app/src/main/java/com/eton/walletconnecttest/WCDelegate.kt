@@ -5,6 +5,8 @@ import com.walletconnect.android.Core
 import com.walletconnect.android.CoreClient
 import com.walletconnect.sign.client.Sign
 import com.walletconnect.sign.client.SignClient
+import com.walletconnect.web3.modal.client.Modal
+import com.walletconnect.web3.modal.client.Web3Modal
 import com.walletconnect.web3.wallet.client.Wallet
 import com.walletconnect.web3.wallet.client.Web3Wallet
 import kotlinx.coroutines.CoroutineScope
@@ -34,8 +36,8 @@ object WCDelegate : Web3Wallet.WalletDelegate, CoreClient.CoreDelegate {
     var currentId: Long? = null
 
     init {
-        CoreClient.setDelegate(this)
-        Web3Wallet.setWalletDelegate(this)
+//        CoreClient.setDelegate(this)
+//        Web3Wallet.setWalletDelegate(this)
     }
 
     override fun onAuthRequest(
@@ -242,6 +244,63 @@ object WCDelegate : Web3Wallet.WalletDelegate, CoreClient.CoreDelegate {
         override fun onSessionEvent(sessionEvent: Sign.Model.Event) {
             super.onSessionEvent(sessionEvent)
             Log.d("EEE", "DappDelegate onSessionEvent:  $sessionEvent")
+        }
+    }
+
+    val web3ModelDelegate = object : Web3Modal.ModalDelegate {
+        override fun onSessionAuthenticateResponse(sessionUpdateResponse: Modal.Model.SessionAuthenticateResponse) {
+            super.onSessionAuthenticateResponse(sessionUpdateResponse)
+            Log.d("EEE", "Web3ModelDelegate onSessionAuthenticateResponse:  $sessionUpdateResponse")
+        }
+
+        override fun onSessionEvent(sessionEvent: Modal.Model.Event) {
+            super.onSessionEvent(sessionEvent)
+            Log.d("EEE", "Web3ModelDelegate onSessionEvent:  $sessionEvent")
+        }
+
+        override fun onConnectionStateChange(state: Modal.Model.ConnectionState) {
+            Log.d("EEE", "Web3ModelDelegate onConnectionStateChange:  $state")
+        }
+
+        override fun onError(error: Modal.Model.Error) {
+            Log.d("EEE", "Web3ModelDelegate onError:  $error")
+        }
+
+        override fun onProposalExpired(proposal: Modal.Model.ExpiredProposal) {
+            Log.d("EEE", "Web3ModelDelegate onProposalExpired:  $proposal")
+        }
+
+        override fun onRequestExpired(request: Modal.Model.ExpiredRequest) {
+            Log.d("EEE", "Web3ModelDelegate onRequestExpired:  $request")
+        }
+
+        override fun onSessionApproved(approvedSession: Modal.Model.ApprovedSession) {
+            // 從錢包回來後會在此收到 approve 訊息
+            Log.d("EEE", "Web3ModelDelegate onSessionApproved:  $approvedSession")
+        }
+
+        override fun onSessionDelete(deletedSession: Modal.Model.DeletedSession) {
+            Log.d("EEE", "Web3ModelDelegate onSessionDelete:  $deletedSession")
+        }
+
+        override fun onSessionEvent(sessionEvent: Modal.Model.SessionEvent) {
+            Log.d("EEE", "Web3ModelDelegate onSessionEvent:  $sessionEvent")
+        }
+
+        override fun onSessionExtend(session: Modal.Model.Session) {
+            Log.d("EEE", "Web3ModelDelegate onSessionExtend:  $session")
+        }
+
+        override fun onSessionRejected(rejectedSession: Modal.Model.RejectedSession) {
+            Log.d("EEE", "Web3ModelDelegate onSessionRejected:  $rejectedSession")
+        }
+
+        override fun onSessionRequestResponse(response: Modal.Model.SessionRequestResponse) {
+            Log.d("EEE", "Web3ModelDelegate onSessionRequestResponse:  $response")
+        }
+
+        override fun onSessionUpdate(updatedSession: Modal.Model.UpdatedSession) {
+            Log.d("EEE", "Web3ModelDelegate onSessionUpdate:  $updatedSession")
         }
     }
 }

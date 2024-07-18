@@ -26,6 +26,7 @@ class MainActivity : AppCompatActivity() {
 //        WalletConnectManager.init(activity = this)
 //        WalletConnectManager.signInit(this)
         WalletConnectManager.web3ModelInit(this)
+
         val navHostFragment = supportFragmentManager
             .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         navController = navHostFragment.navController
