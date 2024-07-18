@@ -50,4 +50,8 @@ dependencies {
     implementation("com.walletconnect:android-core")
     implementation("com.walletconnect:web3wallet")
     implementation("com.walletconnect:sign")
+    implementation("com.walletconnect:web3modal")
+
+    implementation ("androidx.navigation:navigation-fragment-ktx:2.7.7")
+    implementation ("androidx.navigation:navigation-ui-ktx:2.7.7")
 }

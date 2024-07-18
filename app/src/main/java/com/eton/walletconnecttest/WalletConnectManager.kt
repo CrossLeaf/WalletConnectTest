@@ -10,6 +10,9 @@ import com.walletconnect.android.CoreClient
 import com.walletconnect.android.relay.ConnectionType
 import com.walletconnect.sign.client.Sign
 import com.walletconnect.sign.client.SignClient
+import com.walletconnect.web3.modal.client.Modal
+import com.walletconnect.web3.modal.client.Web3Modal
+import com.walletconnect.web3.modal.presets.Web3ModalChainsPresets
 import com.walletconnect.web3.wallet.client.Wallet
 import com.walletconnect.web3.wallet.client.Web3Wallet
 
@@ -71,6 +74,35 @@ object WalletConnectManager {
         SignClient.setDappDelegate(WCDelegate.dappDelegate)
         SignClient.setWalletDelegate(WCDelegate.walletDelegate)
 
+    }
+
+    fun web3ModelInit(activity: Activity) {
+        val appMetaData = Core.Model.AppMetaData(
+            name = "Eton Wallet",
+            description = "My wallet is very good for U",
+            url = "kotlin.walletconnect.com",
+            icons = listOf("https://raw.githubusercontent.com/WalletConnect/walletconnect-assets/master/Icon/Gradient/Icon.png"),
+            redirect = "kotlin-web3modal://request" // Custom Redirect URI
+        )
+        CoreClient.initialize(
+            relayServerUrl = serverUrl,
+            connectionType = connectionType,
+            application = activity.application,
+            metaData = appMetaData,
+            telemetryEnabled = telemetryEnabled
+        ) { error: Core.Model.Error ->
+            Log.d(TAG, "CoreClient initialize error  ${error.throwable.message}")
+        }
+
+        val initParams = Modal.Params.Init(core = CoreClient)
+
+        Web3Modal.initialize(initParams,
+            onSuccess = {
+                Log.d(TAG, "Web3Wallet initialize onSuccess")
+                Web3Modal.setChains(Web3ModalChainsPresets.ethChains.values.toList())
+            }, onError = {
+                Log.d(TAG, "Web3Wallet initialize error  ${it.throwable.message}")
+            })
     }
 
     fun signConnect(activity: Activity) {
