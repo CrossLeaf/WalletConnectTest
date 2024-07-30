@@ -46,7 +46,7 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 
-    implementation(platform("com.walletconnect:android-bom:1.32.1"))
+    implementation(platform("com.walletconnect:android-bom:1.33.0"))
     implementation("com.walletconnect:android-core")
     implementation("com.walletconnect:web3wallet")
     implementation("com.walletconnect:sign")
