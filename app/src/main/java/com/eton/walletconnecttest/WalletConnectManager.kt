@@ -10,9 +10,12 @@ import com.walletconnect.android.CoreClient
 import com.walletconnect.android.relay.ConnectionType
 import com.walletconnect.sign.client.Sign
 import com.walletconnect.sign.client.SignClient
+import com.walletconnect.util.bytesToHex
+import com.walletconnect.util.randomBytes
 import com.walletconnect.web3.modal.client.Modal
 import com.walletconnect.web3.modal.client.Web3Modal
 import com.walletconnect.web3.modal.presets.Web3ModalChainsPresets
+import com.walletconnect.web3.modal.utils.EthUtils
 import com.walletconnect.web3.wallet.client.Wallet
 import com.walletconnect.web3.wallet.client.Web3Wallet
 
@@ -99,11 +102,20 @@ object WalletConnectManager {
         Web3Modal.initialize(initParams,
             onSuccess = {
                 Log.d(TAG, "Web3Wallet initialize onSuccess")
-                Web3Modal.setChains(Web3ModalChainsPresets.ethChains.values.toList())
             }, onError = {
                 Log.d(TAG, "Web3Wallet initialize error  ${it.throwable.message}")
             })
+        Web3Modal.setChains(Web3ModalChainsPresets.ethChains.values.toList())
         Web3Modal.setDelegate(WCDelegate.web3ModelDelegate)
+        val authParams = Modal.Model.AuthPayloadParams(
+            chains = Web3ModalChainsPresets.ethChains.values.toList().map { it.id },
+            domain = "sample.kotlin.modal",
+            uri = "https://web3inbox.com/all-apps",
+            nonce = randomBytes(12).bytesToHex(),
+            statement = "I accept the Terms of Service: https://yourDappDomain.com/",
+            methods = EthUtils.ethMethods
+        )
+        Web3Modal.setAuthRequestParams(authParams)
     }
 
     fun signConnect(activity: Activity) {

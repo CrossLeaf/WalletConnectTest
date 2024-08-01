@@ -37,7 +37,7 @@ object WCDelegate : Web3Wallet.WalletDelegate, CoreClient.CoreDelegate {
 
     init {
 //        CoreClient.setDelegate(this)
-//        Web3Wallet.setWalletDelegate(this)
+        Web3Wallet.setWalletDelegate(this)
     }
 
     override fun onAuthRequest(
